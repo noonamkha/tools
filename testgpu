@@ -1,0 +1,30 @@
+import torch
+from logab import log_wrap
+from fire import Fire
+from setproctitle import setproctitle
+
+def main(dtype=torch.float32):
+    setproctitle("nu-test-gpu")
+    
+    # Store tensors in a list so they aren't garbage collected
+    tensors = []
+    
+    if torch.cuda.is_available():
+        num_devices = torch.cuda.device_count()
+        print(f"Allocating on {num_devices} GPU(s)...")
+        
+        for i in range(num_devices):
+            device_name = f"cuda:{i}"
+            tensor = torch.randn(512, 1024, device=device_name, dtype=dtype)
+            tensors.append(tensor)
+            print(f"Allocated tensor on {device_name}")
+    else:
+        print("No GPUs available. Allocating on CPU...")
+        tensors.append(torch.randn(512, 1024, device="cpu", dtype=dtype))
+
+    while True:
+        pass
+
+if __name__ == "__main__":
+    with log_wrap():
+        Fire(main)

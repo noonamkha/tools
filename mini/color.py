@@ -5,101 +5,6 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 import math
 
-color_dict_ori = {
-    "A": {
-        "list": [0, 0, 0, 0, 0, 51, 102, 153, 204],
-        "freq": 21
-    },
-    "B": {
-        "list": [17, 34, 51, 68, 85, 119, 153, 187, 221],
-        "freq": 6,
-    },
-    "C": {
-        "list": [34, 68, 102, 136, 170, 187, 204, 221, 238],
-        "freq": 6,
-    },
-    "D": {
-        "list": [51, 102, 153, 204, 255, 255, 255, 255, 255],
-        "freq": 21,
-    }
-}
-
-color_list_ori = [
-    {
-        "colors": "color-0",
-        "values": "DAA"
-    },
-    {
-        "colors": "color-1",
-        "values": "DBA"
-    },
-    {
-        "colors": "color-2",
-        "values": "DCA"
-    },
-    {
-        "colors": "color-3",
-        "values": "DDA"
-    },
-    {
-        "colors": "color-4",
-        "values": "CDA"
-    },
-    {
-        "colors": "color-5",
-        "values": "BDA"
-    },
-    {
-        "colors": "color-6",
-        "values": "ADA"
-    },
-    {
-        "colors": "color-7",
-        "values": "ADB"
-    },
-    {
-        "colors": "color-8",
-        "values": "ADC"
-    },
-    {
-        "colors": "color-9",
-        "values": "ADD"
-    },
-    {
-        "colors": "color-10",
-        "values": "ACD"
-    },
-    {
-        "colors": "color-11",
-        "values": "ABD"
-    },
-    {
-        "colors": "color-12",
-        "values": "AAD"
-    },
-    {
-        "colors": "color-13",
-        "values": "BAD"
-    },
-    {
-        "colors": "color-14",
-        "values": "CAD'"
-    },
-    {
-        "colors": "color-15",
-        "values": "DAD"
-    },
-    {
-        "colors": "color-16",
-        "values": "DAC"
-    },
-    {
-        "colors": "color-17",
-        "values": "DAB"
-    }
-]
-
-
 # ----------------------------------------------------------------list 4----------------------------------------------------------------
 if False:
     # Define A
@@ -353,7 +258,8 @@ else:
     
     
 # ----------------------------------------------------------------func----------------------------------------------------------------
-
+def transpose(matrix):
+    return [list(row) for row in zip(*matrix)]
 
 def prepare_color(col_list, col_dict):
     # my_colors = [
@@ -380,7 +286,7 @@ def prepare_color(col_list, col_dict):
         list_g = color_group['values'][1]
         list_b = color_group['values'][2]
         new_matrix = [col_dict[list_r]['list'], col_dict[list_g]['list'], col_dict[list_b]['list']]
-        new_trans = [list(row) for row in zip(*new_matrix)]
+        new_trans = transpose(new_matrix)
         color_array.append(new_trans)
         color_title.append(color_group['values'])
     return color_array, color_title
@@ -499,9 +405,17 @@ def plot_lines(col_dict, output_path='line.png'):
     plt.show()
     plt.close()
 
-# def extract_lum(color_array):
-#     lum_array = []
-#     for color_grou[p]
+def avg_lum(color_array):
+    lum_array = []
+    for idx, color_group in enumerate(color_array):
+        lum_array.append([])
+        for r, g, b in color_group:
+            lum = relative_luminance([r,g,b])
+            lum_array[-1].append(lum)
+    lum_array = transpose(lum_array)
+    lum_avg = [f"{sum(grp)/len(grp):.5f}" for grp in lum_array]
+    return lum_avg
+    
 
 def brute_func(A_star, A_gap_1, A_gap_2):
     A_list = [
@@ -603,8 +517,9 @@ def brute_func(A_star, A_gap_1, A_gap_2):
     ]
 
     color_array, color_title = prepare_color(color_list, color_dict)
-    plot_lines(color_dict, output_path=f"images/lines/line-{A_star}-{A_gap_1}-{A_gap_2}.png")
-    gen_image_rgb(color_array, column_titles=color_title, output_path=f"images/palettes/palette-{A_star}-{A_gap_1}-{A_gap_2}.png")
+    return avg_lum(color_array)
+    # plot_lines(color_dict, output_path=f"images/lines/line-{A_star}-{A_gap_1}-{A_gap_2}.png")
+    # gen_image_rgb(color_array, column_titles=color_title, output_path=f"images/palettes/palette-{A_star}-{A_gap_1}-{A_gap_2}.png")
 
 
 def brute_force():
@@ -628,8 +543,13 @@ def brute_mini():
         [16, 8, 40],
         [16, 16, 32],
     ]
+    lum_list = []
     for A_star, A_gap_1, A_gap_2 in poss_list:
-        brute_func(A_star, A_gap_1, A_gap_2)
+        lum_list.append(brute_func(A_star, A_gap_1, A_gap_2))
+    lum_list = transpose(lum_list)
+    with open("lum.json", "w") as file:
+        json.dump(lum_list, file)
+
 
 # ----------------------------------------luminance-------------------------------------------------
 

@@ -394,7 +394,7 @@ def gen_image_rgb(color_groups, column_titles=None, output_path="color_palette.p
     col_spacing = 0
     margin_x = 10
     margin_y = 10
-    border_thickness = 1 # Set to 1 so very light colors still have a visible boundary
+    border_thickness = 0 # Set to 1 so very light colors still have a visible boundary
     
     # 2. Header configuration
     header_height = 20 if column_titles else 0
@@ -442,8 +442,8 @@ def gen_image_rgb(color_groups, column_titles=None, output_path="color_palette.p
             # Draw the color swatch rectangle FIRST
             draw.rectangle(
                 [box_x0, box_y0, box_x1, box_y1], 
-                # fill=(r, g, b), 
-                fill=(255, 255, 255), 
+                fill=(r, g, b), 
+                # fill=(255, 255, 255), 
                 outline="black", 
                 width=border_thickness
             )
@@ -461,8 +461,8 @@ def gen_image_rgb(color_groups, column_titles=None, output_path="color_palette.p
             # Smart Contrast: Calculate perceived luminance to decide text color
             
             draw.multiline_text((text_x, text_y), text_str, 
-                                # fill=text_color, 
-                                fill="black", 
+                                fill=text_color, 
+                                # fill="black", 
                                 font=font, align="center")
 
 

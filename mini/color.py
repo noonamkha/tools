@@ -4,6 +4,8 @@ import json
 from collections import defaultdict
 import matplotlib.pyplot as plt
 import math
+import itertools
+import colorsys
 
 # ----------------------------------------------------------------list 4----------------------------------------------------------------
 if False:
@@ -64,80 +66,7 @@ if False:
         }
     }
 
-    color_list = [
-        {
-            "colors": "color-0",
-            "values": "DAA"
-        },
-        {
-            "colors": "color-1",
-            "values": "DBA"
-        },
-        {
-            "colors": "color-2",
-            "values": "DCA"
-        },
-        {
-            "colors": "color-3",
-            "values": "DDA"
-        },
-        {
-            "colors": "color-4",
-            "values": "CDA"
-        },
-        {
-            "colors": "color-5",
-            "values": "BDA"
-        },
-        {
-            "colors": "color-6",
-            "values": "ADA"
-        },
-        {
-            "colors": "color-7",
-            "values": "ADB"
-        },
-        {
-            "colors": "color-8",
-            "values": "ADC"
-        },
-        {
-            "colors": "color-9",
-            "values": "ADD"
-        },
-        {
-            "colors": "color-10",
-            "values": "ACD"
-        },
-        {
-            "colors": "color-11",
-            "values": "ABD"
-        },
-        {
-            "colors": "color-12",
-            "values": "AAD"
-        },
-        {
-            "colors": "color-13",
-            "values": "BAD"
-        },
-        {
-            "colors": "color-14",
-            "values": "CAD'"
-        },
-        {
-            "colors": "color-15",
-            "values": "DAD"
-        },
-        {
-            "colors": "color-16",
-            "values": "DAC"
-        },
-        {
-            "colors": "color-17",
-            "values": "DAB"
-        }
-    ]
+    color_list = ['DAA', 'DBA', 'DCA', 'DDA', 'CDA', 'BDA', 'ADA', 'ADB', 'ADC', 'ADD', 'ACD', 'ABD', 'AAD', 'BAD', "CAD'", 'DAD', 'DAC', 'DAB']
 else:
 # ----------------------------------------------------------------list 3----------------------------------------------------------------
     # color_gap=16
@@ -190,78 +119,20 @@ else:
             ]
     
     color_dict = {
-        "A": {
-            "list": A_list,
-            "freq": 21
-        },
-        "K": {
-            "list": K_list,
-            "freq": 6,
-        },
-        "D": {
-            "list": D_list,
-            "freq": 21,
-        }
+        "A": A_list,
+        "K": K_list,
+        "D": D_list
     }
 
     # color list
-    color_list = [
-        {
-            "colors": "color-0",
-            "values": "DAA"
-        },
-        {
-            "colors": "color-1",
-            "values": "DKA"
-        },
-        {
-            "colors": "color-2",
-            "values": "DDA"
-        },
-        {
-            "colors": "color-3",
-            "values": "KDA"
-        },
-        {
-            "colors": "color-4",
-            "values": "ADA"
-        },
-        {
-            "colors": "color-5",
-            "values": "ADK"
-        },
-        {
-            "colors": "color-6",
-            "values": "ADD"
-        },
-        {
-            "colors": "color-7",
-            "values": "AKD"
-        },
-        {
-            "colors": "color-8",
-            "values": "AAD"
-        },
-        {
-            "colors": "color-9",
-            "values": "KAD"
-        },
-        {
-            "colors": "color-10",
-            "values": "DAD"
-        },
-        {
-            "colors": "color-11",
-            "values": "DAK"
-        }
-    ]
+    color_list = ['DAA', 'DKA', 'DDA', 'KDA', 'ADA', 'ADK', 'ADD', 'AKD', 'AAD', 'KAD', 'DAD', 'DAK']
     
     
 # ----------------------------------------------------------------func----------------------------------------------------------------
 def transpose(matrix):
     return [list(row) for row in zip(*matrix)]
 
-def prepare_color(col_list, col_dict):
+def prepare_color(col_list, col_map):
     # my_colors = [
     #     [
     #         (0, 100, 50),   # Pure Red
@@ -280,19 +151,16 @@ def prepare_color(col_list, col_dict):
     # ]
     # generate_palette_image(nam_pallete, "final_color_palette.png")
     color_array = []
-    color_title = []
     for color_group in col_list:
-        list_r = color_group['values'][0]
-        list_g = color_group['values'][1]
-        list_b = color_group['values'][2]
-        new_matrix = [col_dict[list_r]['list'], col_dict[list_g]['list'], col_dict[list_b]['list']]
+        list_r = color_group[0]
+        list_g = color_group[1]
+        list_b = color_group[2]
+        new_matrix = [col_map[list_r], col_map[list_g], col_map[list_b]]
         new_trans = transpose(new_matrix)
         color_array.append(new_trans)
-        color_title.append(color_group['values'])
-    return color_array, color_title
-    pass
+    return color_array
 
-def gen_image_rgb(color_groups, column_titles=None, output_path="color_palette.png"):
+# def gen_image_rgb(color_groups, column_titles=None, output_path="color_palette.png", print_text=False):
     # 1. Layout & Styling Configuration
     box_width = 120  # Increased to fit multiline text inside
     box_height = 60  # Increased to fit multiline text inside
@@ -365,29 +233,133 @@ def gen_image_rgb(color_groups, column_titles=None, output_path="color_palette.p
             text_y = box_y0 + (box_height - text_h) // 2
             
             # Smart Contrast: Calculate perceived luminance to decide text color
-            
-            draw.multiline_text((text_x, text_y), text_str, 
-                                fill=text_color, 
-                                # fill="black", 
-                                font=font, align="center")
+            if print_text:
+                draw.multiline_text((text_x, text_y), text_str, 
+                                    fill=text_color, 
+                                    # fill="black", 
+                                    font=font, align="center")
+    # 7. Save the result
+    img.save(output_path)
 
+def gen_image_rgb(color_groups, column_titles=None, output_path="color_palette.png",
+                  print_text=False, num_rows=1):
+    # 1. Layout & Styling Configuration
+    box_width = 120
+    box_height = 60
+    row_spacing = 0
+    col_spacing = 0
+    band_spacing = 20   # vertical gap between bands (rows of groups)
+    margin_x = 10
+    margin_y = 10
+    border_thickness = 0
+
+    # 2. Header configuration
+    header_height = 20 if column_titles else 0
+
+    # 3. Split groups into bands (rows)
+    num_groups = len(color_groups)
+    num_rows = max(1, num_rows)
+    cols_per_row = math.ceil(num_groups / num_rows) if num_groups else 0
+
+    # Per-band info: list of (group_index, group) tuples
+    bands = []
+    for b in range(num_rows):
+        start = b * cols_per_row
+        end = min(start + cols_per_row, num_groups)
+        if start >= num_groups:
+            break
+        bands.append(list(range(start, end)))
+
+    # Max swatch-rows within each band (for that band's height)
+    def band_max_rows(group_indices):
+        return max((len(color_groups[i]) for i in group_indices), default=0)
+
+    band_heights = []
+    for group_indices in bands:
+        mr = band_max_rows(group_indices)
+        h = header_height + mr * box_height + max(0, mr - 1) * row_spacing
+        band_heights.append(h)
+
+    # Starting y position for each band
+    band_y_starts = []
+    y = margin_y
+    for h in band_heights:
+        band_y_starts.append(y)
+        y += h + band_spacing
+
+    # 4. Calculate dynamic image dimensions
+    img_width = (margin_x * 2) + cols_per_row * box_width + max(0, cols_per_row - 1) * col_spacing
+    img_height = (margin_y * 2) + sum(band_heights) + max(0, len(bands) - 1) * band_spacing
+
+    # 5. Create white canvas
+    img = Image.new("RGB", (max(img_width, 1), max(img_height, 1)), "white")
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.load_default()
+
+    # 6. Draw everything band by band
+    for band_idx, group_indices in enumerate(bands):
+        band_top = band_y_starts[band_idx]
+
+        for col_in_band, group_idx in enumerate(group_indices):
+            group = color_groups[group_idx]
+            start_x = margin_x + col_in_band * (box_width + col_spacing)
+
+            # Column title (indexed by the global group index)
+            if column_titles and group_idx < len(column_titles):
+                title = column_titles[group_idx]
+                bbox = draw.textbbox((0, 0), title, font=font)
+                text_w = bbox[2] - bbox[0]
+                title_x = start_x + (box_width // 2) - (text_w // 2)
+                title_y = band_top
+                draw.text((title_x, title_y), title, fill="black", font=font)
+
+            # Color swatches
+            for row_idx, (r, g, b) in enumerate(group):
+                hex_val = f"#{r:02x}{g:02x}{b:02x}".upper()
+
+                box_x0 = start_x
+                box_y0 = band_top + header_height + row_idx * (box_height + row_spacing)
+                box_x1 = box_x0 + box_width
+                box_y1 = box_y0 + box_height
+
+                draw.rectangle(
+                    [box_x0, box_y0, box_x1, box_y1],
+                    fill=(r, g, b),
+                    outline="black",
+                    width=border_thickness
+                )
+
+                lum = relative_luminance([r, g, b])
+                text_str = f"{lum:4f}\nrgb({r}, {g}, {b})\n{hex_val}"
+                text_color = get_text_color([r, g, b])
+
+                text_bbox = draw.multiline_textbbox((0, 0), text_str, font=font)
+                text_w = text_bbox[2] - text_bbox[0]
+                text_h = text_bbox[3] - text_bbox[1]
+                text_x = box_x0 + (box_width - text_w) // 2
+                text_y = box_y0 + (box_height - text_h) // 2
+
+                if print_text:
+                    draw.multiline_text((text_x, text_y), text_str,
+                                        fill=text_color, font=font, align="center")
 
     # 7. Save the result
     img.save(output_path)
 
-def plot_lines(col_dict, output_path='line.png'):
+
+def plot_lines(col_map, output_path='line.png'):
     plt.clf()
     markers = ['o', 's', '^', 'd', 'v', '<', '>', 'p', '*', 'h']
     
-    for i, (key, value) in enumerate(col_dict.items()):
+    for i, (key, value) in enumerate(col_map.items()):
         # Use modulo (%) to cycle back to the start of the marker list if needed
         current_marker = markers[i % len(markers)]
         
         # Plot the line and markers
-        plt.plot(value['list'], label=key, marker=current_marker)
+        plt.plot(value, label=key, marker=current_marker)
         
         # Loop through the list to add text annotations to each marker
-        for j, val in enumerate(value['list']):
+        for j, val in enumerate(value):
             # j is the x-coordinate (index), val is the y-coordinate (value)
             # ha='center' centers the text horizontally over the marker
             # va='bottom' places the text slightly above the center of the marker
@@ -516,7 +488,7 @@ def brute_func(A_star, A_gap_1, A_gap_2):
         }
     ]
 
-    color_array, color_title = prepare_color(color_list, color_dict)
+    color_array = prepare_color(color_list, color_dict)
     return avg_lum(color_array)
     # plot_lines(color_dict, output_path=f"images/lines/line-{A_star}-{A_gap_1}-{A_gap_2}.png")
     # gen_image_rgb(color_array, column_titles=color_title, output_path=f"images/palettes/palette-{A_star}-{A_gap_1}-{A_gap_2}.png")
@@ -552,6 +524,50 @@ def brute_mini():
 
 
 # ----------------------------------------luminance-------------------------------------------------
+def hex_to_rgb(hex_str):
+    # Remove the '#' character if present
+    h = hex_str.lstrip('#')
+    # Convert hex slices directly to integer values
+    return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+def convert_ok(L, C, H):
+    """
+    Convert OKLCH to sRGB.
+      L: lightness  (0..1)
+      C: chroma     (~0..0.4)
+      H: hue        (degrees, 0..360)
+    Returns (r, g, b) as integers 0..255.
+    """
+    # 1. OKLCH -> OKLab  (polar to cartesian)
+    h = math.radians(H)
+    a = C * math.cos(h)
+    b = C * math.sin(h)
+
+    # 2. OKLab -> linear sRGB  (Björn Ottosson's matrices)
+    L = L/100
+    l_ = L + 0.3963377774 * a + 0.2158037573 * b
+    m_ = L - 0.1055613458 * a - 0.0638541728 * b
+    s_ = L - 0.0894841775 * a - 1.2914855480 * b
+
+    l, m, s = l_**3, m_**3, s_**3
+
+    r_lin =  4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s
+    g_lin = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s
+    b_lin = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
+
+    # 3. linear sRGB -> sRGB (gamma encode), with per-channel gamut clip
+    def gamma(x):
+        # x = max(0.0, min(1.0, x))           # clamp out-of-gamut values
+        if x <= 0.0031308:
+            return 12.92 * x
+        return 1.055 * (x ** (1 / 2.4)) - 0.055
+    r = gamma(r_lin)
+    g = gamma(g_lin)
+    b = gamma(b_lin)
+    r_255 = max(0, min(255, round(r * 255)))
+    g_255 = max(0, min(255, round(g * 255)))
+    b_255 = max(0, min(255, round(b * 255)))
+    # final_color = tuple(round(gamma(c) * 255) for c in (r_lin, g_lin, b_lin))
+    return (r_255, g_255, b_255)
 
 def relative_luminance(rgb):
     """Relative luminance per WCAG 2.x. rgb is a tuple of 0-255 ints."""
@@ -579,11 +595,338 @@ def got_text_color(bg_rgb):
     brightness = (bg_rgb[0] * 299 + bg_rgb[1] * 587 + bg_rgb[2] * 114) / 1000
     return (0, 0, 0) if brightness > 128 else (255, 255, 255)
 
+def build_ok():
+    ok_list = []
+    for hue in range(24, 361, 24):
+        ok_list.append([])
+        for light in range(5, 100, 10):
+            new_color = convert_ok(light, 0.1, hue)
+            ok_list[-1].append(new_color)
+    gen_image_rgb(ok_list,  output_path="ok.png")
+    gen_image_rgb(ok_list,  output_path="ok_text.png", print_text=True)
+    
+def google():
+    pass
+    google_list = [
+        "#EA4335",
+        "#34A853",
+        "#4285F4",
+        "#FBBC05",
+        "#E37400"
+    ]
+    # lum_list = [relative_luminance(hex_to_rgb(col)) for col in google_list]
+    # rgb_list = [hex_to_rgb(col) for col in google_list]
+    lum_list = [
+        0.21763776240210037, 
+        0.29359861237316676, 
+        0.24464961992425516, 
+        0.5648662643283174, 
+        0.2882167569992944
+    ]
+    # 32 96 160 224
+    # rgb_list = [
+    #     "rgb(224, 96, 96)", 
+    #     "rgb(96, 224, 160)", 
+    #     "rgb(96, 160, 224)", 
+    #     "rgb(224, 160, 32)", 
+    #     "rgb(224, 96, 32)"
+    # ]
+    # # 0 85 170 255
+    # rgb_list = [
+    #     "rgb(255, 85, 85)", 
+    #     "rgb(85, 255, 170)", 
+    #     "rgb(85, 170, 255)", 
+    #     "rgb(255, 170, 0)", 
+    #     "rgb(255, 85, 0)"
+    # ]
+    rgb_list = [
+        "rgb(234, 67, 53)", 
+        "rgb(52, 168, 83)", 
+        "rgb(66, 133, 244)", 
+        "rgb(251, 188, 5)", 
+        "rgb(227, 116, 0)"
+    ]
+    # 32 64 128 192 224
+    rgb_list = [
+        "rgb(224, 64, 64)", 
+        "rgb(64, 192, 64)", 
+        "rgb(64, 128, 224)", 
+        "rgb(224, 192, 32)", 
+        "rgb(224, 128, 32)"
+    ]
+    # 32 80 128 176 224
+    rgb_list = [
+        "rgb(224, 80, 80)", 
+        "rgb(80, 176, 80)", 
+        "rgb(64, 128, 224)", 
+        "rgb(224, 176, 32)", 
+        "rgb(224, 128, 32)",
+        "rgb(128, 64, 176)"
+    ]
+
+def hue(rgb):
+    r, g, b = [x / 255 for x in rgb]
+    return colorsys.rgb_to_hsv(r, g, b)[0]   # 0..1
+def new_sys():
+    # values = [32, 64, 128, 192, 224]
+    # values = [32, 96, 128, 160, 224]
+    values = [32, 80, 128, 176, 224]
+    # values = [0, 85, 128, 170, 255]
+
+    # Each of R, G, B can independently be any of the 4 values → 4**3 = 64 combos
+    combos = itertools.product(values, repeat=3)
+
+    # Remove grays (R == G == B). Their hue is undefined, so they can't be sorted by hue.
+    colors = [c for c in combos if not (c[0] == c[1] == c[2])]   # 60 colors
+
+
+    colors_sorted = sorted(colors, key=hue)
+    colors_rgb = [f"rgb{str(item)}" for item in colors_sorted]
+    color_key = {
+        values[0]: "A",
+        values[1]: "B",
+        values[2]: "K",
+        values[3]: "C",
+        values[4]: "D",
+    }
+    color_dict = [f"{color_key[item[0]]}{color_key[item[1]]}{color_key[item[2]]}" for item in colors_sorted]
+    with open("color-dict-5.json", "w") as file:
+        json.dump(color_dict, file, indent=4)
+    
+    # with open("color_list_2.json", "w") as file:
+    #     json.dump(colors_rgb, file, indent=4)
+    pass
+
+
+
+def brute_four():
+    # -------------------------profile 1
+    # mid_A = 32
+    # mid_B = 95
+    # mid_C = 160
+    # mid_D = 223
+    # outer_gap_slow = 8
+    # outer_gap_fast = 44
+    # inner_gap_slow = 20
+    # inner_gap_fast = 32
+    # -------------------------profile 2
+    mid_A = 32
+    mid_B = 96
+    mid_C = 160
+    mid_D = 224
+    outer_gap_slow = 4
+    outer_gap_fast = 40
+    inner_gap_slow = 16
+    inner_gap_fast = 28
+    # -------------------------profile 3
+    # mid_A = 0
+    # mid_B = 85
+    # mid_C = 170
+    # mid_D = 255
+    # outer_gap_slow = 0
+    # outer_gap_fast = 51
+    # inner_gap_slow = 17
+    # inner_gap_fast = 34
+    # -------------------------profile 4
+    mid_A = 0
+    mid_B = 85
+    mid_C = 170
+    mid_D = 255
+    outer_gap_slow = 0
+    outer_gap_fast = 51
+    inner_gap_slow = 17
+    inner_gap_fast = 34
+    color_map = {
+        "A": [
+                mid_A-outer_gap_slow*4,
+                mid_A-outer_gap_slow*3,
+                mid_A-outer_gap_slow*2,
+                mid_A-outer_gap_slow,
+                mid_A,
+                mid_A+outer_gap_fast,
+                mid_A+outer_gap_fast*2,
+                mid_A+outer_gap_fast*3,
+                mid_A+outer_gap_fast*4,
+            ],
+        "B": [
+                mid_B-inner_gap_slow*4,
+                mid_B-inner_gap_slow*3,
+                mid_B-inner_gap_slow*2,
+                mid_B-inner_gap_slow,
+                mid_B,
+                mid_B+inner_gap_fast,
+                mid_B+inner_gap_fast*2,
+                mid_B+inner_gap_fast*3,
+                mid_B+inner_gap_fast*4,
+            ],
+        "C": [
+                mid_C-inner_gap_fast*4,
+                mid_C-inner_gap_fast*3,
+                mid_C-inner_gap_fast*2,
+                mid_C-inner_gap_fast,
+                mid_C,
+                mid_C+inner_gap_slow,
+                mid_C+inner_gap_slow*2,
+                mid_C+inner_gap_slow*3,
+                mid_C+inner_gap_slow*4,
+            ],
+        "D": [
+                mid_D-outer_gap_fast*4,
+                mid_D-outer_gap_fast*3,
+                mid_D-outer_gap_fast*2,
+                mid_D-outer_gap_fast,
+                mid_D,
+                mid_D+outer_gap_slow,
+                mid_D+outer_gap_slow*2,
+                mid_D+outer_gap_slow*3,
+                mid_D+outer_gap_slow*4,
+            ],
+    }
+    with open('color_dlist-3.json', 'r') as file:
+        color_dlist = json.load(file)
+    color_list = prepare_color(col_list=color_dlist, col_map=color_map)
+    # color_flat = [item for sublist in color_list for item in sublist]
+    # colors_sorted = sorted(color_flat, key=hue)
+    
+    # for idx, color in enumerate(color_flat):
+    #     if color != colors_sorted[idx]:
+    #         break
+    
+    gen_image_rgb(color_list, column_titles=color_dlist, output_path="color_palette-2.png", print_text=False)
+    gen_image_rgb(color_list, column_titles=color_dlist, output_path="color_palette-2-text.png", print_text=True)
+
+
+    plot_lines(color_map, output_path='line-2.png')
+    pass
+
+
+
+def brute_five():
+    # -------------------------profile 1
+    mid_A = 32
+    mid_B = 64
+    mid_K = 128
+    mid_C = 192
+    mid_D = 224
+
+    outer_gap_slow = 4
+    outer_gap_fast = 40
+    mid_gap = 22
+    inner_gap_slow = 10
+    inner_gap_fast = 34
+    # -------------------------profile 2
+    # mid_A = 32
+    # mid_B = 96
+    # mid_K = 128
+    # mid_C = 160
+    # mid_D = 224
+
+    # outer_gap_slow = 4
+    # outer_gap_fast = 40
+    # mid_gap = 22
+    # inner_gap_slow = 16
+    # inner_gap_fast = 28
+    # -------------------------profile 3
+    # mid_A = 32
+    # mid_B = 96
+    # mid_K = 128
+    # mid_C = 160
+    # mid_D = 224
+
+    # outer_gap_slow = 4
+    # outer_gap_fast = 40
+    # mid_gap = 22
+    # inner_gap_slow = 16
+    # inner_gap_fast = 28
+    # -------------------------color map
+    color_map = {
+        "A": [
+                mid_A-outer_gap_slow*4,
+                mid_A-outer_gap_slow*3,
+                mid_A-outer_gap_slow*2,
+                mid_A-outer_gap_slow,
+                mid_A,
+                mid_A+outer_gap_fast,
+                mid_A+outer_gap_fast*2,
+                mid_A+outer_gap_fast*3,
+                mid_A+outer_gap_fast*4,
+            ],
+        "B": [
+                mid_B-inner_gap_slow*4,
+                mid_B-inner_gap_slow*3,
+                mid_B-inner_gap_slow*2,
+                mid_B-inner_gap_slow,
+                mid_B,
+                mid_B+inner_gap_fast,
+                mid_B+inner_gap_fast*2,
+                mid_B+inner_gap_fast*3,
+                mid_B+inner_gap_fast*4,
+            ],
+        "K": [
+                mid_K-mid_gap*4,
+                mid_K-mid_gap*3,
+                mid_K-mid_gap*2,
+                mid_K-mid_gap,
+                mid_K,
+                mid_K+mid_gap,
+                mid_K+mid_gap*2,
+                mid_K+mid_gap*3,
+                mid_K+mid_gap*4,
+            ],
+        "C": [
+                mid_C-inner_gap_fast*4,
+                mid_C-inner_gap_fast*3,
+                mid_C-inner_gap_fast*2,
+                mid_C-inner_gap_fast,
+                mid_C,
+                mid_C+inner_gap_slow,
+                mid_C+inner_gap_slow*2,
+                mid_C+inner_gap_slow*3,
+                mid_C+inner_gap_slow*4,
+            ],
+        "D": [
+                mid_D-outer_gap_fast*4,
+                mid_D-outer_gap_fast*3,
+                mid_D-outer_gap_fast*2,
+                mid_D-outer_gap_fast,
+                mid_D,
+                mid_D+outer_gap_slow,
+                mid_D+outer_gap_slow*2,
+                mid_D+outer_gap_slow*3,
+                mid_D+outer_gap_slow*4,
+            ],
+    }
+    with open('color-dict-5.json', 'r') as file:
+        color_dict = json.load(file)
+    plot_lines(color_map, output_path='line-5.png')
+    # quit()
+    color_list = prepare_color(col_list=color_dict, col_map=color_map)
+    # color_flat = [item for sublist in color_list for item in sublist]
+    # colors_sorted = sorted(color_flat, key=hue)
+    
+    # for idx, color in enumerate(color_flat):
+    #     if color != colors_sorted[idx]:
+    #         break
+    
+    gen_image_rgb(color_list, column_titles=color_dict, output_path="color_palette-5.png", print_text=False, num_rows=4)
+    gen_image_rgb(color_list, column_titles=color_dict, output_path="color_palette-5-text.png", print_text=True, num_rows=4)
+
+
+    pass
 
 if __name__ == "__main__":
-    brute_mini()
+    # result = convert_ok(90, 0.2, 200)
+    # build_ok()
+    # brute_five()
+    new_sys()
+    # brute_mini()
     # brute_force()
     # plot_lines(color_dict_4)
     # prepare_color(color_list_4, color_dict_4)
     # prepare_color(color_list_ori, color_dict_ori)
     # prepare_color(color_list_3, color_dict_3)
+
+# There are 5 numbers 32, 64, 128, 192, 224. Randomly take combination of 3 to form an RGB colors. Take all possible combinations and remove all the gray color (R=G=B), how to sort them like a rainbow. I don't want to convert to HSL, is there a pattern like the increase/decrease of each value of RGB channel to sort them?
+
+
+# There are 5 numbers A, B, C, D, E. We don't know the specific value of each number, we just know that they are in range of RGB colors (0, 255) and A < B < C < D < E. Take all possible combinations of 3 to form RGB colors and remove all the gray colors (R=G=B). How to sort them like a rainbow. I don't want to convert to HSL since we don't know the specific value of each number. Is there a pattern like the increase/decrease of each value of RGB channel to sort them?

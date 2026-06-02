@@ -6,7 +6,7 @@
             "type": "debugpy",
             "request": "attach",
             "connect": {
-                "host": "p2-gpu-15.hpc.adelaide.edu.au",
+                "host": "p2-gpu-1.hpc.adelaide.edu.au",
                 // "host": "localhost",
                 "port": 5678
             },

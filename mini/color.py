@@ -641,10 +641,43 @@ def google():
     # ]
     rgb_list = [
         "rgb(234, 67, 53)", 
+        "rgb(227, 116, 0)"
+        "rgb(251, 188, 5)", 
         "rgb(52, 168, 83)", 
         "rgb(66, 133, 244)", 
-        "rgb(251, 188, 5)", 
-        "rgb(227, 116, 0)"
+    ]
+    # 8 68 128 188 248
+    rgb_list = [
+        "rgb(248, 68, 68)", 
+        "rgb(248, 128, 8)"
+        "rgb(248, 188, 8)", 
+        "rgb(248, 248, 68)", 
+        "rgb(188, 248, 8)",
+        "rgb(128, 248, 68)",
+        "rgb(68, 248, 8)",
+        "rgb(68, 188, 68)", 
+        "rgb(68, 248, 188)",
+        "rgb(68, 188, 188)", 
+        "rgb(68, 128, 248)", 
+    ]
+    # 8 68 128 188 248
+    rgb_list = [
+        "rgb(248, 68, 68)", 
+        "rgb(248, 128, 8)" 
+        "rgb(248, 188, 8)", 
+        "rgb(248, 248, 68)", 
+        "rgb(188, 248, 8)", # 8 or 68
+        "rgb(128, 248, 68)", 
+        "rgb(68, 248, 68)", 
+        "rgb(8, 248, 128)", 
+        "rgb(8, 248, 188)", 
+        "rgb(68, 248, 248)", 
+        "rgb(68, 188, 248)", 
+        "rgb(68, 128, 248)", 
+        "rgb(68, 68, 248)", 
+        "rgb(128, 8, 248)", 
+        "rgb(248, 68, 248)", 
+        "rgb(248, 8, 188)",
     ]
     # 32 64 128 192 224
     rgb_list = [
@@ -656,12 +689,35 @@ def google():
     ]
     # 32 80 128 176 224
     rgb_list = [
-        "rgb(224, 80, 80)", 
-        "rgb(80, 176, 80)", 
-        "rgb(64, 128, 224)", 
-        "rgb(224, 176, 32)", 
+        "rgb(232, 24, 24)", 
         "rgb(224, 128, 32)",
-        "rgb(128, 64, 176)"
+        "rgb(224, 176, 32)", 
+        "rgb(80, 176, 80)", 
+        "rgb(80, 128, 224)", 
+        "rgb(66, 66, 240)" #AAD
+        "rgb(124, 66, 240)" #BAD
+    ]
+    # 8 68 128 188 248 
+    # A B  K   C   D
+    rgb_list = [
+        "DBB rgb(248, 68, 68)", # new
+        "DKA rgb(248, 128, 8)" 
+        "DCA rgb(248, 188, 8)", 
+        "DDB rgb(248, 248, 68)", # new
+        "CDA rgb(188, 248, 8)", 
+        "KDB rgb(128, 248, 8)", 
+        "BDB rgb(68, 248, 68)",# new
+        "ADK rgb(68, 248, 128)", 
+        "ADC rgb(8, 248, 188)", 
+        "BDD rgb(68, 248, 248)",  # new
+        "BCD rgb(68, 188, 248)", 
+        "BKD rgb(68, 128, 248)", 
+        "BBD rgb(68, 68, 248)", # new
+        "KBD rgb(128, 68, 248)", 
+        "CBD rgb(188, 68, 248)", 
+        "DBD rgb(248, 68, 248)", # new
+        "DBC rgb(248, 68, 188)", 
+        "DBK rgb(248, 68, 128)", 
     ]
 
 def hue(rgb):
@@ -698,27 +754,8 @@ def new_sys():
     pass
 
 
-
 def brute_four():
-    # -------------------------profile 1
-    # mid_A = 32
-    # mid_B = 95
-    # mid_C = 160
-    # mid_D = 223
-    # outer_gap_slow = 8
-    # outer_gap_fast = 44
-    # inner_gap_slow = 20
-    # inner_gap_fast = 32
-    # -------------------------profile 2
-    mid_A = 32
-    mid_B = 96
-    mid_C = 160
-    mid_D = 224
-    outer_gap_slow = 4
-    outer_gap_fast = 40
-    inner_gap_slow = 16
-    inner_gap_fast = 28
-    # -------------------------profile 3
+    # -------------------------profile 0
     # mid_A = 0
     # mid_B = 85
     # mid_C = 170
@@ -727,26 +764,75 @@ def brute_four():
     # outer_gap_fast = 51
     # inner_gap_slow = 17
     # inner_gap_fast = 34
+    # -------------------------profile 1
+    # mid_A = 24
+    # mid_B = 92
+    # mid_C = 164
+    # mid_D = 232
+    # outer_gap_slow = 4
+    # outer_gap_fast = 46
+    # inner_gap_slow = 18
+    # inner_gap_fast = 32
+    # -------------------------profile 2
+    # mid_A = 32
+    # mid_B = 95
+    # mid_C = 160
+    # mid_D = 223
+    # outer_gap_slow = 8
+    # outer_gap_fast = 44
+    # inner_gap_slow = 20
+    # inner_gap_fast = 32
+    # -------------------------profile 3
+    # mid_A = 32
+    # mid_B = 96
+    # mid_C = 160
+    # mid_D = 224
+    # outer_gap_slow = 4
+    # outer_gap_fast = 40
+    # inner_gap_slow = 16
+    # inner_gap_fast = 28
     # -------------------------profile 4
-    mid_A = 0
-    mid_B = 85
-    mid_C = 170
-    mid_D = 255
-    outer_gap_slow = 0
-    outer_gap_fast = 51
-    inner_gap_slow = 17
-    inner_gap_fast = 34
+    mid_A = 103
+    mid_B = 151
+    mid_C = 199
+    mid_D = 247
+
+    # outer_gap_slow = 2
+    # outer_gap_fast = 26
+    # inner_gap_slow = 10
+    # inner_gap_fast = 18
+
+    start_A = 7
+    start_B = 23
+    start_C = 39
+    start_D = 55
+    
+    end_A = 207
+    end_B = 223
+    end_C = 239
+    end_D = 255
+
+    dark_A = round((mid_A-start_A)/4)
+    dark_B = round((mid_B-start_B)/4)
+    dark_C = round((mid_C-start_C)/4)
+    dark_D = round((mid_D-start_D)/4)
+    
+    light_A = round((end_A-mid_A)/4)
+    light_B = round((end_B-mid_B)/4)
+    light_C = round((end_C-mid_C)/4)
+    light_D = round((end_D-mid_D)/4)
+
     color_map = {
         "A": [
-                mid_A-outer_gap_slow*4,
-                mid_A-outer_gap_slow*3,
-                mid_A-outer_gap_slow*2,
-                mid_A-outer_gap_slow,
+                mid_A-dark_A*4,
+                mid_A-dark_A*3,
+                mid_A-dark_A*2,
+                mid_A-dark_A,
                 mid_A,
-                mid_A+outer_gap_fast,
-                mid_A+outer_gap_fast*2,
-                mid_A+outer_gap_fast*3,
-                mid_A+outer_gap_fast*4,
+                mid_A+light_A,
+                mid_A+light_A*2,
+                mid_A+light_A*3,
+                mid_A+light_A*4,
             ],
         "B": [
                 mid_B-inner_gap_slow*4,
@@ -782,7 +868,7 @@ def brute_four():
                 mid_D+outer_gap_slow*4,
             ],
     }
-    with open('color_dlist-3.json', 'r') as file:
+    with open('color-dict-18.json', 'r') as file:
         color_dlist = json.load(file)
     color_list = prepare_color(col_list=color_dlist, col_map=color_map)
     # color_flat = [item for sublist in color_list for item in sublist]
@@ -792,40 +878,51 @@ def brute_four():
     #     if color != colors_sorted[idx]:
     #         break
     
-    gen_image_rgb(color_list, column_titles=color_dlist, output_path="color_palette-2.png", print_text=False)
-    gen_image_rgb(color_list, column_titles=color_dlist, output_path="color_palette-2-text.png", print_text=True)
+    gen_image_rgb(color_list, column_titles=color_dlist, output_path="color_palette-185.png", print_text=False)
+    gen_image_rgb(color_list, column_titles=color_dlist, output_path="color_palette-185-text.png", print_text=True)
 
 
-    plot_lines(color_map, output_path='line-2.png')
+    plot_lines(color_map, output_path='line-185.png')
     pass
 
 
-
 def brute_five():
-    # -------------------------profile 1
-    mid_A = 32
-    mid_B = 64
+    # -------------------------profile 0
+    mid_A = 8
+    mid_B = 68
     mid_K = 128
-    mid_C = 192
-    mid_D = 224
+    mid_C = 188
+    mid_D = 248
 
-    outer_gap_slow = 4
-    outer_gap_fast = 40
+    outer_gap_slow = 0
+    outer_gap_fast = 44
     mid_gap = 22
-    inner_gap_slow = 10
-    inner_gap_fast = 34
-    # -------------------------profile 2
+    inner_gap_slow = 11
+    inner_gap_fast = 33
+    # -------------------------profile 1
     # mid_A = 32
-    # mid_B = 96
+    # mid_B = 64
     # mid_K = 128
-    # mid_C = 160
+    # mid_C = 192
     # mid_D = 224
 
     # outer_gap_slow = 4
     # outer_gap_fast = 40
     # mid_gap = 22
-    # inner_gap_slow = 16
-    # inner_gap_fast = 28
+    # inner_gap_slow = 10
+    # inner_gap_fast = 34
+    # -------------------------profile 2
+    # mid_A = 32
+    # mid_B = 80
+    # mid_K = 128
+    # mid_C = 176
+    # mid_D = 224
+
+    # outer_gap_slow = 4
+    # outer_gap_fast = 40
+    # mid_gap = 22
+    # inner_gap_slow = 13
+    # inner_gap_fast = 31
     # -------------------------profile 3
     # mid_A = 32
     # mid_B = 96
@@ -896,9 +993,9 @@ def brute_five():
                 mid_D+outer_gap_slow*4,
             ],
     }
-    with open('color-dict-5.json', 'r') as file:
+    with open('color-dict-120-filter.json', 'r') as file:
         color_dict = json.load(file)
-    plot_lines(color_map, output_path='line-5.png')
+    plot_lines(color_map, output_path='line-50.png')
     # quit()
     color_list = prepare_color(col_list=color_dict, col_map=color_map)
     # color_flat = [item for sublist in color_list for item in sublist]
@@ -908,8 +1005,8 @@ def brute_five():
     #     if color != colors_sorted[idx]:
     #         break
     
-    gen_image_rgb(color_list, column_titles=color_dict, output_path="color_palette-5.png", print_text=False, num_rows=4)
-    gen_image_rgb(color_list, column_titles=color_dict, output_path="color_palette-5-text.png", print_text=True, num_rows=4)
+    gen_image_rgb(color_list, column_titles=color_dict, output_path="color_palette-50f.png", print_text=False, num_rows=3)
+    gen_image_rgb(color_list, column_titles=color_dict, output_path="color_palette-50f-text.png", print_text=True, num_rows=3)
 
 
     pass
@@ -918,15 +1015,10 @@ if __name__ == "__main__":
     # result = convert_ok(90, 0.2, 200)
     # build_ok()
     # brute_five()
-    new_sys()
+    # new_sys()
     # brute_mini()
-    # brute_force()
+    brute_four()
     # plot_lines(color_dict_4)
     # prepare_color(color_list_4, color_dict_4)
     # prepare_color(color_list_ori, color_dict_ori)
     # prepare_color(color_list_3, color_dict_3)
-
-# There are 5 numbers 32, 64, 128, 192, 224. Randomly take combination of 3 to form an RGB colors. Take all possible combinations and remove all the gray color (R=G=B), how to sort them like a rainbow. I don't want to convert to HSL, is there a pattern like the increase/decrease of each value of RGB channel to sort them?
-
-
-# There are 5 numbers A, B, C, D, E. We don't know the specific value of each number, we just know that they are in range of RGB colors (0, 255) and A < B < C < D < E. Take all possible combinations of 3 to form RGB colors and remove all the gray colors (R=G=B). How to sort them like a rainbow. I don't want to convert to HSL since we don't know the specific value of each number. Is there a pattern like the increase/decrease of each value of RGB channel to sort them?
